@@ -1,0 +1,54 @@
+{% extends 'musabaqah/base.html' %}
+{% load tailwind_filters %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen relative">
+
+    <!-- Internal CSS -->
+    <style>
+        .bg-quran {
+            background-image: url("{% static 'images/quran.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+
+    <!-- Apply the Background Image -->
+    <div class="bg-quran min-h-screen">
+
+        <!-- Dark overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-0"></div>
+
+        <!-- Login Card -->
+        <div class="relative z-10 flex items-center justify-center min-h-screen px-6">
+            <div class="bg-white bg-opacity-80 p-8 rounded-3xl shadow-2xl max-w-lg w-full">
+
+                <div class="text-center mb-6">
+                    <img src="{% static 'images/quran.jpg' %}" alt="Logo" class="w-16 h-16 object-cover rounded-full mx-auto mb-4">
+                    <h2 class="text-3xl font-bold text-gray-800">Login to Musabaqah</h2>
+                    <p class="text-gray-500 mt-2">Welcome back! Please enter your credentials to continue.</p>
+                </div>
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                  
+                    <button type="submit" 
+                            class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-lg transition duration-300 transform hover:scale-105">
+                        Login
+                    </button>
+                </form>
+
+                <p class="text-center text-sm text-gray-600 mt-6">
+                    Not authorized? 
+                    <a href="{% url 'home' %}" class="text-yellow-500 hover:underline">Back to Home</a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock content %}

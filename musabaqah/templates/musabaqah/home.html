@@ -1,0 +1,11 @@
+{% extends 'musabaqah/base.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'musabaqah/nav.html' %}
+
+    <div class="mt-4">  {# Added a Tailwind CSS class for margin-top #}
+        <h4>hellooooo</h4>
+        {{user}}
+    </div>
+{% endblock content %}

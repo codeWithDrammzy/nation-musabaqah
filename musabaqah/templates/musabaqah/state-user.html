@@ -1,0 +1,128 @@
+{% extends 'musabaqah/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="flex bg-gray-100 min-h-screen">
+
+    {% include 'musabaqah/sidebar.html' %}
+
+    <main class="flex-1 p-6 transition-all duration-300 ease-in-out ml-0 md:ml-64" id="main-content">
+        <header class="flex justify-between items-center mb-6">
+            <button onclick="toggleSidebar()" class="md:hidden text-gray-800 hover:text-gray-600 focus:outline-none focus:shadow-outline mr-4">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M4 5h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2z"/></svg>
+            </button>
+            <div class="text-2xl font-bold text-gray-800">State User</div>
+            <div></div>
+        </header>
+
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-8">
+            
+
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto border border-gray-300 rounded-lg overflow-hidden">
+                    <thead>
+                        <tr class="bg-gray-800 text-white uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Name</th>
+                            <th class="py-3 px-6 text-left">Phone</th>
+                            <th class="py-3 px-6 text-left">Profile Pic</th>
+                            <th class="py-3 px-6 text-left">Email</th>
+                            <th class="py-3 px-6 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 text-sm font-light">
+                        {% for user in state_users %}
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">{{ user.name|upper }}</td>
+                            <td class="py-3 px-6 text-left">{{ user.phone|upper }}</td>
+                            <td class="py-3 px-6 text-left">
+                                {% if user.profile_pic %}
+                                <img src="{{ user.profile_pic.url }}" alt="Profile Picture"
+                                    class="w-16 h-16 rounded-full object-cover">
+                                {% else %}
+                                <span class="text-gray-500">No Photo</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-3 px-6 text-left">{{ user.email|upper }}</td>
+                            <td class="py-3 text-center px-6">
+                                <div>
+                                    <form method="post" action="#"
+                                        onsubmit="return confirm('Are you sure you want to manage this user?');"
+                                        class="inline-block">
+                                        {% csrf_token %}
+                                        <div class="flex justify-between space-x-4">
+                                            <button type="submit"
+                                                class="px-4 py-2 bg-yellow-500 text-white text-sm rounded-lg shadow-md hover:bg-yellow-600 transition duration-200">
+                                                Manage User
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="py-4 text-center text-gray-500">No participants found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="add-candidate-form" class="bg-white p-6 rounded-lg shadow-md">
+
+            <div class="flex justify-between">
+                <h3 class="text-2xl font-semibold  text-gray-800 mb-4">Add Cordinator</h3>
+            </div>
+            <div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                            <input type="text" name="name" id="name"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone</label>
+                            <input type="tel" name="phone" id="phone"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div>
+                            <label for="profile_pic" class="block text-gray-700 text-sm font-bold mb-2">Profile
+                                Picture</label>
+                            <input type="file" name="profile_pic" id="profile_pic"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                            <input type="email" name="email" id="email"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                    </div>
+                    <button type="submit"
+                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('main-content');
+
+    function toggleSidebar() {
+        sidebar.classList.toggle('-translate-x-full');
+        mainContent.classList.toggle('ml-0');
+        mainContent.classList.toggle('md:ml-64');
+    }
+</script>
+{% endblock content %}

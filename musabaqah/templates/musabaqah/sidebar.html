@@ -1,0 +1,35 @@
+{% load static %}  
+<aside class="bg-gray-800 text-white w-64 p-5 flex-shrink-0 hidden md:flex flex-col transition-all duration-300 ease-in-out" id="sidebar">
+    <div class="mb-6 flex items-center">
+        <img src="{% static 'images/quran.jpg' %}" alt="Logo" class="w-10 h-10 object-contain rounded-full mr-3">
+        <h1 class="text-xl font-bold">National Musabaqah</h1>
+    </div>
+    <nav class="flex-1">
+        <ul class="space-y-4">
+            <li>
+                <a href="{% url 'dashboard' %}" class="flex items-center space-x-3 text-gray-300 hover:text-white">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'state-user' %}" class="flex items-center space-x-3 text-yellow-400">
+                    <i class="fas fa-users"></i>
+                    <span>State Users</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'participants' %}" class="flex items-center space-x-3 text-gray-300 hover:text-white">
+                    <i class="fas fa-users"></i>
+                    <span>Participant</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-white">
+                    <i class="fas fa-cogs"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>

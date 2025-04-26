@@ -1,0 +1,147 @@
+{% extends 'musabaqah/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="flex bg-gray-100 min-h-screen">
+
+    {% include 'musabaqah/sidebar.html' %}
+
+    <main class="flex-1 p-6 transition-all duration-300 ease-in-out ml-0 md:ml-64" id="main-content">
+        <header class="flex justify-between items-center mb-6">
+            <button onclick="toggleSidebar()" class="md:hidden text-gray-800 hover:text-gray-600 focus:outline-none focus:shadow-outline mr-4">
+                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M4 5h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2z"/></svg>
+            </button>
+            <div class="text-2xl font-bold text-gray-800">Participant</div>
+            <div></div>
+        </header>
+
+        {% if pending_users %}
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-8">
+            <div class="flex justify-between items-center px-6 py-4">
+                <h3 class="text-xl font-semibold text-gray-800">Pending Participants for Approval ({{ pending_users|length }})</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto border border-gray-300 rounded-lg overflow-hidden">
+                    <thead>
+                        <tr class="bg-yellow-700 text-white uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Name</th>
+                            <th class="py-3 px-6 text-left">Phone</th>
+                            <th class="py-3 px-6 text-left">Profile Pic</th>
+                            <th class="py-3 px-6 text-left">Email</th>
+                            <th class="py-3 px-6 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 text-sm font-light">
+                        {% for user in pending_users %}
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">{{ user.name|upper }}</td>
+                            <td class="py-3 px-6 text-left">{{ user.phone|upper }}</td>
+                            <td class="py-3 px-6 text-left">
+                                {% if user.profile_pic %}
+                                <img src="{{ user.profile_pic.url }}" alt="Profile Picture"
+                                    class="w-16 h-16 rounded-full object-cover">
+                                {% else %}
+                                <span class="text-gray-500">No Photo</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-3 px-6 text-left">{{ user.email|upper }}</td>
+                            <td class="py-3 text-center px-6">
+                                <div class="flex justify-center space-x-2">
+                                    <form method="post" action="{% url 'approve_participant' user.id %}" class="inline-block">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                            class="px-4 py-2 bg-green-500 text-white text-sm rounded-lg shadow-md hover:bg-green-600 transition duration-200">
+                                            Approve
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{% url 'reject_participant' user.id %}" class="inline-block">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                            class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow-md hover:bg-red-600 transition duration-200">
+                                            Reject
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="py-4 text-center text-gray-500">No participants pending approval.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-8">
+            <div class="flex justify-between items-center px-6 py-4">
+                <h3 class="text-xl font-semibold text-gray-800">Approved Participants ({{ approved_users|length }})</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto border border-gray-300 rounded-lg overflow-hidden">
+                    <thead>
+                        <tr class="bg-gray-800 text-white uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Name</th>
+                            <th class="py-3 px-6 text-left">Phone</th>
+                            <th class="py-3 px-6 text-left">Profile Pic</th>
+                            <th class="py-3 px-6 text-left">Email</th>
+                            <th class="py-3 px-6 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 text-sm font-light">
+                        {% for user in approved_users %}
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">{{ user.name|upper }}</td>
+                            <td class="py-3 px-6 text-left">{{ user.phone|upper }}</td>
+                            <td class="py-3 px-6 text-left">
+                                {% if user.profile_pic %}
+                                <img src="{{ user.profile_pic.url }}" alt="Profile Picture"
+                                    class="w-16 h-16 rounded-full object-cover">
+                                {% else %}
+                                <span class="text-gray-500">No Photo</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-3 px-6 text-left">{{ user.email|upper }}</td>
+                            <td class="py-3 text-center px-6">
+                                <div>
+                                    <form method="post" action="#"
+                                        onsubmit="return confirm('Are you sure you want to manage this user?');"
+                                        class="inline-block">
+                                        {% csrf_token %}
+                                        <div class="flex justify-center space-x-4">
+                                            <button type="submit"
+                                                class="px-4 py-2 bg-yellow-500 text-white text-sm rounded-lg shadow-md hover:bg-yellow-600 transition duration-200">
+                                                Manage User
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="py-4 text-center text-gray-500">No approved participants found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('main-content');
+
+    function toggleSidebar() {
+        sidebar.classList.toggle('-translate-x-full');
+        mainContent.classList.toggle('ml-0');
+        mainContent.classList.toggle('md:ml-64');
+    }
+</script>
+{% endblock content %}
