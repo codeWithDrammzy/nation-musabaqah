@@ -1,4 +1,5 @@
 {% extends 'musabaqah/base.html' %}
+{% load tailwind_filters %}
 {% load static %}
 
 {% block content %}
@@ -30,28 +31,26 @@
                         </tr>
                     </thead>
                     <tbody class="text-gray-700 text-sm font-light">
-                        {% for user in state_users %}
+                        {% for user in state %}
                         <tr class="border-b border-gray-200 hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left">{{ user.name|upper }}</td>
+                            <td class="py-3 px-6 text-left">{{ user.first_name|upper }} {{ user.last_name|upper }}</td>
                             <td class="py-3 px-6 text-left">{{ user.phone|upper }}</td>
                             <td class="py-3 px-6 text-left">
-                                {% if user.profile_pic %}
-                                <img src="{{ user.profile_pic.url }}" alt="Profile Picture"
-                                    class="w-16 h-16 rounded-full object-cover">
+                                {% if user.avatar %}
+                                    <img src="{{ user.avatar.url }}" alt="Profile Picture" class="w-16 h-16 rounded-full object-cover">
                                 {% else %}
-                                <span class="text-gray-500">No Photo</span>
+                                    <img src="{% static 'images/avater.png' %}" alt="Profile Picture" class="w-16 h-16 rounded-full object-cover">
                                 {% endif %}
                             </td>
+                            
                             <td class="py-3 px-6 text-left">{{ user.email|upper }}</td>
                             <td class="py-3 text-center px-6">
                                 <div>
                                     <form method="post" action="#"
-                                        onsubmit="return confirm('Are you sure you want to manage this user?');"
-                                        class="inline-block">
+                                        onsubmit="return confirm('Are you sure you want to manage this user?');" class="inline-block">
                                         {% csrf_token %}
                                         <div class="flex justify-between space-x-4">
-                                            <button type="submit"
-                                                class="px-4 py-2 bg-yellow-500 text-white text-sm rounded-lg shadow-md hover:bg-yellow-600 transition duration-200">
+                                            <button type="submit" class="px-4 py-2 bg-yellow-500 text-white text-sm rounded-lg shadow-md hover:bg-yellow-600 transition duration-200">
                                                 Manage User
                                             </button>
                                         </div>
@@ -59,11 +58,12 @@
                                 </div>
                             </td>
                         </tr>
-                        {% empty %}
+                    {% empty %}
                         <tr>
                             <td colspan="5" class="py-4 text-center text-gray-500">No participants found.</td>
                         </tr>
-                        {% endfor %}
+                    {% endfor %}
+                    
                     </tbody>
                 </table>
             </div>
@@ -78,30 +78,7 @@
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
-                            <input type="text" name="name" id="name"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                required>
-                        </div>
-                        <div>
-                            <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone</label>
-                            <input type="tel" name="phone" id="phone"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                required>
-                        </div>
-                        <div>
-                            <label for="profile_pic" class="block text-gray-700 text-sm font-bold mb-2">Profile
-                                Picture</label>
-                            <input type="file" name="profile_pic" id="profile_pic"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                        </div>
-                        <div>
-                            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                            <input type="email" name="email" id="email"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                required>
-                        </div>
+                        {{form|crispy}}
                     </div>
                     <button type="submit"
                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">

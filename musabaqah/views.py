@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from.forms import LoginUserForm
+from.forms import LoginUserForm, StateUserForm
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import auth
+from. models import *
 
 from django.contrib.auth.decorators import login_required
 
@@ -31,7 +32,17 @@ def dashboard(request):
 
 @login_required(login_url="my-login")
 def state_user(request):
-    return render(request, "musabaqah/state-user.html")
+    state = StateUser.objects.all()
+    form = StateUserForm()
+    if request.method == "POST":
+        form= StateUserForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard")
+    context ={"form":form,
+              "state":state
+              }   
+    return render(request, "musabaqah/state-user.html", context)
 
 def participant(request):
     return render(request, "musabaqah/participants.html")
