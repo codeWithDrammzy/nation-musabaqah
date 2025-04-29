@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
+
 
 NIGERIAN_STATES = (
     ('AB', 'Abia'),
@@ -42,14 +43,20 @@ NIGERIAN_STATES = (
 )
 
 
+
 class StateUser(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=13)
+    role = models.CharField(max_length=20, default='cordinator')
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     state = models.CharField(max_length=2, choices=NIGERIAN_STATES)
-   
+    password = models.CharField(max_length=128, default=make_password('1234'))  # default hashed password
+
     def __str__(self):
-        return self.first_name + "  " + self.last_name
+        return self.first_name + " " + self.last_name
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 

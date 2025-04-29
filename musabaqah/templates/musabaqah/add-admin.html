@@ -15,7 +15,7 @@
                     <path fill-rule="evenodd" d="M4 5h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2z"/>
                 </svg>
             </button>
-            <div class="text-2xl font-bold text-gray-800">State User</div>
+            <div class="text-2xl font-bold text-gray-800">Super Admins</div>
             <div><a href="#add-user" class="text-blue-600 hover:underline flex items-center">
                 <div class="rounded-full bg-blue-200 w-8 h-8 flex items-center justify-center mr-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -30,26 +30,17 @@
             <table class="w-full table-auto border border-gray-300 rounded-lg overflow-hidden">
                 <thead>
                     <tr class="bg-gray-800 text-white uppercase text-sm leading-normal">
-                        <th class="py-3 px-6 text-left">Name</th>
-                        <th class="py-3 px-6 text-left">Phone</th>
-                        <th class="py-3 px-6 text-left">Profile</th>
+                        <th class="py-3 px-6 text-left">Username</th>
                         <th class="py-3 px-6 text-left">Email</th>
-                        <th class="py-3 px-6 text-center">Actions</th>
+                       
                     </tr>
                 </thead>
                 <tbody class="text-gray-700 text-sm font-light">
-                    {% for user in state %}
+                    {% for user in admin %}
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
-                        <td class="py-3 px-6 text-left">{{ user.first_name|upper }} {{ user.last_name|upper }}</td>
-                        <td class="py-3 px-6 text-left">{{ user.phone|upper }}</td>
-                        <td class="py-3 px-6 text-left">
-                            {% if user.avatar %}
-                                <img src="{{ user.avatar.url }}" alt="Profile Picture" class="w-16 h-16 rounded-full object-cover">
-                            {% else %}
-                                <img src="{% static 'images/avater.png' %}" alt="Profile Picture" class="w-16 h-16 rounded-full object-cover">
-                            {% endif %}
-                        </td> 
+                        <td class="py-3 px-6 text-left">{{ user.username|upper }} </td>
                         <td class="py-3 px-6 text-left">{{ user.email|upper }}</td>
+<!--                         
                         <td class="py-3 px-6 text-center">
                             <div>
                                 <form method="post" action="#"
@@ -60,11 +51,11 @@
                                     </button>
                                 </form>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" class="py-4 text-center text-gray-500">No participants found.</td>
+                        <td colspan="5" class="py-4 text-center text-gray-500">No Admin found.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -73,7 +64,7 @@
 
         <div id="add-user" class="bg-white p-6 rounded-lg shadow-md">
             <div class="flex justify-between">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Add Coordinator</h3>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Add Super Admin</h3>
             </div>
             <div>
                 <form method="POST" enctype="multipart/form-data">
