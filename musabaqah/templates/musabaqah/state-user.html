@@ -7,7 +7,7 @@
 
     {% include 'musabaqah/sidebar.html' %}
     
-    <main class="flex-1  p-6 overflow-auto" id="main-content">
+    <main class="flex-1 md:ml-64  p-6 overflow-auto" id="main-content">
 
         <header class="flex justify-between items-center mb-6">
             <button onclick="toggleSidebar()" class="md:hidden text-gray-800 hover:text-gray-600 focus:outline-none focus:shadow-outline mr-4">
@@ -33,7 +33,7 @@
                         <th class="py-3 px-6 text-left">Name</th>
                         <th class="py-3 px-6 text-left">Phone</th>
                         <th class="py-3 px-6 text-left">Profile</th>
-                        <th class="py-3 px-6 text-left">Email</th>
+                        <th class="py-3 px-6 text-left">State</th>
                         <th class="py-3 px-6 text-center">Actions</th>
                     </tr>
                 </thead>
@@ -49,7 +49,8 @@
                                 <img src="{% static 'images/avater.png' %}" alt="Profile Picture" class="w-16 h-16 rounded-full object-cover">
                             {% endif %}
                         </td> 
-                        <td class="py-3 px-6 text-left">{{ user.email|upper }}</td>
+                        <td class="py-3 px-6 text-left">{{ user.get_state_display|upper }}</td>
+
                         <td class="py-3 px-6 text-center">
                             <div>
                                 <form method="post" action="#"

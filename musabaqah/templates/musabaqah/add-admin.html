@@ -7,7 +7,7 @@
 
     {% include 'musabaqah/sidebar.html' %}
     
-    <main class="flex-1  p-6 overflow-auto" id="main-content">
+    <main class="flex-1 md:ml-64 p-6 overflow-auto" id="main-content">
 
         <header class="flex justify-between items-center mb-6">
             <button onclick="toggleSidebar()" class="md:hidden text-gray-800 hover:text-gray-600 focus:outline-none focus:shadow-outline mr-4">
@@ -39,19 +39,8 @@
                     {% for user in admin %}
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
                         <td class="py-3 px-6 text-left">{{ user.username|upper }} </td>
-                        <td class="py-3 px-6 text-left">{{ user.email|upper }}</td>
-<!--                         
-                        <td class="py-3 px-6 text-center">
-                            <div>
-                                <form method="post" action="#"
-                                    onsubmit="return confirm('Are you sure you want to manage this user?');" class="inline-block">
-                                    {% csrf_token %}
-                                    <button type="submit" class="px-4 py-2 bg-yellow-500 text-white text-sm rounded-lg shadow-md hover:bg-yellow-600 transition duration-200">
-                                        Manage User
-                                    </button>
-                                </form>
-                            </div>
-                        </td> -->
+                        <td class="py-3 px-6 text-left">{{ user.email }}</td>
+
                     </tr>
                     {% empty %}
                     <tr>

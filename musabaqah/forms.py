@@ -28,3 +28,8 @@ class StateUserForm(forms.ModelForm):
         model = StateUser
         fields = ['first_name', 'last_name', 'email', 'phone', 'avatar', 'state']
         exclude = ['role']
+class ParticipantForm(forms.ModelForm):
+    class Meta:
+        model = Participant
+        fields = '__all__'
+        exclude =['state_user']

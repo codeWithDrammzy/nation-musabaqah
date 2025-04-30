@@ -1,5 +1,6 @@
 {% load static %}  
-<aside class="bg-gray-800 text-white w-64 p-5 flex-shrink-0 hidden md:flex flex-col transition-all duration-300 ease-in-out" id="sidebar">
+<aside class="fixed rounded h-full left-0 bg-gray-800 text-white w-64 h-[calc(100vh-4rem)] p-5 flex-shrink-0 hidden md:flex flex-col z-40" id="sidebar">
+
     <div class="mb-6 flex items-center">
         <img src="{% static 'images/quran.jpg' %}" alt="Logo" class="w-10 h-10 object-contain rounded-full mr-3">
         <h1 class="text-xl font-bold">National Musabaqah</h1>
@@ -12,12 +13,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li>
-                <a href="{% url 'add-admin' %}"  class="flex items-center space-x-3 text-gray-300 hover:text-white">
-                    <i class="fas fa-users"></i>
-                    <span>Admins</span>
-                </a>
-            </li>
+            
             <li>
                 <a href="{% url 'state-user' %}"  class="flex items-center space-x-3 text-gray-300 hover:text-white">
                     <i class="fas fa-users"></i>
@@ -28,6 +24,12 @@
                 <a href="{% url 'participants' %}" class="flex items-center space-x-3 text-gray-300 hover:text-white">
                     <i class="fas fa-users"></i>
                     <span>Participant</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'add-admin' %}"  class="flex items-center space-x-3 text-gray-300 hover:text-white">
+                    <i class="fas fa-users"></i>
+                    <span>Admins</span>
                 </a>
             </li>
             <li>

@@ -42,7 +42,19 @@ NIGERIAN_STATES = (
     ('ZA', 'Zamfara'),
 )
 
+CATEGORY =(
+    ('1st', '60Hibz'),
+    ('2nd', '40Hibz'),
+    ('3rd', '20Hibz'),
+    ('4th', '10Hibz'),
+    ('5th', '2Hibz')
 
+)
+
+GENDER_CHOICES = (
+    ('M', 'Male'),
+    ('F', 'Female'),
+)
 
 class StateUser(models.Model):
     first_name = models.CharField(max_length=100)
@@ -60,3 +72,25 @@ class StateUser(models.Model):
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
+
+class Participant(models.Model):
+    state_user = models.ForeignKey('StateUser', on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    national_id = models.CharField(max_length=11, unique=True)
+    hibz = models.CharField(choices=CATEGORY, max_length=10)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['hibz', 'gender'], name='unique_hibz_per_gender')
+        ]
+
+
+def __str__(self):
+    return self.first_name + " "+ self.last_name
+
+@property
+def state(self):
+    return self.state_user.state

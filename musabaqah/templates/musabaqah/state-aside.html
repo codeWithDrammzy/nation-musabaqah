@@ -1,0 +1,19 @@
+<aside class="fixed top-16 left-0 w-64 bg-gray-800 shadow h-[calc(100vh-4rem)] hidden rounded md:block z-40">
+    <h1 class="text-xl text-white p-4 font-bold">State Coordinator</h1>
+    <nav class="p-4">
+        <ul class="space-y-2 text-white">
+            <li>
+                <a href="{% url 'state-board' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black">Dashboard</a>
+            </li>
+            <li>
+                <a href="{% url 'state-part' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black">Participants</a>
+            </li>
+            <li>
+                <a href="{% url 'state-cord' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black">Coordinators</a>
+            </li>
+            <li>
+                <a href="{% url 'logout-user' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</aside>

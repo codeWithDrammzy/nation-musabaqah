@@ -1,0 +1,123 @@
+{% load static %}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>State|Participants</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Top Navigation -->
+    <header class="fixed top-0 left-0 right-0 bg-white shadow z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="{% static 'images/quran.jpg' %}" alt="Logo" class="w-10 h-10 object-contain rounded-full mr-3">
+                <h1 class="text-xl text-gray-800 font-bold">National Musabaqah</h1>
+            </div>
+            <div class="text-sm text-gray-600">
+                Welcome, <span class="font-semibold">{{ state_user.first_name|upper }}</span>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- Main Layout -->
+    <div class="flex">
+
+        <!-- Sidebar -->
+        {% include 'musabaqah/state-aside.html' %}                                                         
+
+        <!-- Main Content -->
+        <main class="flex-1 pt-24 px-6 md:ml-64">
+
+            <div class="bg-white p-6 rounded-xl shadow  max-w-5xl mx-auto">
+                <h3 class="text-lg font-semibold mb-4 text-gray-800">State Participants</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full table-auto text-sm">
+                        <thead class="bg-gray-100 text-gray-700">
+                            <tr>
+                                <th class="px-4 py-2 text-left">Profile</th>
+                                
+                                <th class="px-4 py-2 text-left">National ID</th>
+                                <th class="px-4 py-2 text-left">Hizb</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in part %}
+                                {% if request.user.state_user == user.part.state %}
+                                <tr class="border-t">
+                                    <td class="px-4 py-2 text-left flex items-center gap-3">
+                                        {% if user.avatar %}
+                                            <img src="{{ user.avatar.url }}" alt="{{ user.first_name }}" class="w-10 h-10 rounded-full object-cover">
+                                        {% else %}
+                                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm text-white">N/A</div>
+                                        {% endif %}
+                                        <span>{{ user.first_name|upper }} {{ user.last_name|upper }}</span>
+                                    </td>
+                                    <td class="px-4 py-2 text-left">{{ user.national_id }}</td>
+                                    <td class="px-4 py-2 text-left">{{ user.hibz }}</td>
+                                </tr>
+                                {% endif %}
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-gray-500 py-4">No Registered Participants found.</td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            
+            <!-- New Participant Form Section -->
+            <div class="bg-white p-6 rounded-xl shadow mt-6 max-w-5xl mx-auto">
+                <h3 class="text-lg font-semibold mb-4 text-gray-800">Add New Participant</h3>
+                
+                <form method="POST" enctype="multipart/form-data" class="space-y-4">
+                    {% csrf_token %}
+                  
+                    <div class="flex flex-wrap gap-4">
+                        <div class="w-full md:w-[48%]">
+                            {{ form.first_name.label_tag }}
+                            {{ form.first_name|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                        </div>
+                        <div class="w-full md:w-[48%]">
+                            {{ form.last_name.label_tag }}
+                            {{ form.last_name|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                        </div>
+                        <div class="w-full md:w-[48%]">
+                            {{ form.national_id.label_tag }}
+                            {{ form.national_id|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                        </div>
+                        <div class="w-full md:w-[48%]">
+                            {{ form.hibz.label_tag }}
+                            {{ form.hibz|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                        </div>
+                        <div class="w-full md:w-[48%]">
+                            {{ form.gender.label_tag }}
+                            {{ form.gender|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                        </div>
+                        <div class="w-full md:w-[48%]">
+                            {{ form.avatar.label_tag }}
+                            {{ form.avatar|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Participant</button>
+                    </div>
+                </form>
+            </div>
+                
+
+        </main>
+    </div>
+
+</body>
+</html>

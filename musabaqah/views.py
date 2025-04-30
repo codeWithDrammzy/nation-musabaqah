@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from.forms import LoginUserForm, StateUserForm , CreateUser, EmailLoginForm
+from.forms import LoginUserForm, StateUserForm , CreateUser, EmailLoginForm, ParticipantForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import auth
 from. models import *
@@ -9,8 +9,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 def home(request):
-    return render(request, "musabaqah/home.html")
 
+    return render(request, "musabaqah/home.html")
 
 def my_login(request):
     form = EmailLoginForm()
@@ -46,7 +46,11 @@ def my_login(request):
 
 @login_required(login_url="my-login")
 def dashboard(request):
-    return render(request, "musabaqah/dashboard.html")
+    total_users = StateUser.objects.count()
+    total_participants = Participant.objects.count()
+    context = {'total_users': total_users, 'total_participants':total_participants}
+    return render(request, "musabaqah/dashboard.html", context)
+
 
 
 def add_admin(request):
@@ -86,20 +90,67 @@ def state_user(request):
         "state": state
     }
     return render(request, "musabaqah/state-user.html", context)
+
 def participant(request):
-    return render(request, "musabaqah/participants.html")
-
-
+    part = Participant.objects.all().order_by('hibz')
+    context = {'part':part}
+    return render(request, "musabaqah/participants.html",context)
 
 # state users views
-
 def state_board(request):
-        user_id = request.session.get('state_user_id')
-        if not user_id:
-          return redirect('my-login')
-       
+    user_id = request.session.get('state_user_id')
+    if not user_id:
+        return redirect('my-login')
 
-        return render(request, 'musabaqah/state-board.html')
+    # Fetch the state user from DB
+    state_user = StateUser.objects.get(id=user_id)
+
+    return render(request, 'musabaqah/state-board.html', {'state_user': state_user})
+
+
+def state_cord(request):
+    user_id = request.session.get('state_user_id')
+    if not user_id:
+        return redirect('my-login')
+
+    state_user = StateUser.objects.get(id=user_id)
+    cord = StateUser.objects.all()
+    
+    context = {
+        'cord': cord,
+        'state_user': state_user
+    }
+    return render(request, 'musabaqah/state-cord.html', context)
+
+
+def state_part(request):
+    user_id = request.session.get('state_user_id')
+    if not user_id:
+        return redirect('my-login')
+
+    state_user = StateUser.objects.get(id=user_id)
+    
+    # Only fetch participants related to this state_user
+    part = Participant.objects.filter(state_user=state_user)
+    
+    form = ParticipantForm()
+    if request.method == 'POST':
+        form = ParticipantForm(request.POST, request.FILES)
+        if form.is_valid():
+            participant = form.save(commit=False)
+            participant.state_user = state_user
+            participant.save()
+            return redirect('state-board')
+
+    context = {
+        'part': part,
+        'state_user': state_user,
+        'form': form
+    }
+    return render(request, 'musabaqah/state-part.html', context)
+
+
+
 
 def logout_user(request):
     auth.logout(request)
