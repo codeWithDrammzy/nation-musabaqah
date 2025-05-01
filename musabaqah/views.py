@@ -7,6 +7,10 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
+import random
+import string
+from django.core.mail import send_mail
+
 
 def home(request):
 
@@ -43,15 +47,12 @@ def my_login(request):
 
     return render(request, "musabaqah/my-login.html", {'form': form})
 
-
 @login_required(login_url="my-login")
 def dashboard(request):
     total_users = StateUser.objects.count()
     total_participants = Participant.objects.count()
     context = {'total_users': total_users, 'total_participants':total_participants}
     return render(request, "musabaqah/dashboard.html", context)
-
-
 
 def add_admin(request):
     admin = User.objects.filter(is_superuser=True)  
@@ -73,7 +74,6 @@ def add_admin(request):
     }
     return render(request, 'musabaqah/add-admin.html', context)
 
-
 @login_required(login_url="my-login")
 def state_user(request):
     state = StateUser.objects.all()
@@ -91,10 +91,30 @@ def state_user(request):
     }
     return render(request, "musabaqah/state-user.html", context)
 
+@login_required(login_url="my-login")
 def participant(request):
     part = Participant.objects.all().order_by('hibz')
     context = {'part':part}
     return render(request, "musabaqah/participants.html",context)
+
+@login_required(login_url="my-login")
+def state_user_view(request, pk):
+    try:
+        state_user = StateUser.objects.get(id=pk)
+        part = Participant.objects.filter(state_user=state_user).order_by('hibz')
+
+    except StateUser.DoesNotExist:
+        messages.error(request, "State user not found.")
+        return redirect("state-user")
+
+    context = {
+        'state_user': state_user,
+        'part': part
+    }
+    return render(request, 'musabaqah/state-user-view.html', context)
+
+
+
 
 # state users views
 def state_board(request):
@@ -106,7 +126,6 @@ def state_board(request):
     state_user = StateUser.objects.get(id=user_id)
 
     return render(request, 'musabaqah/state-board.html', {'state_user': state_user})
-
 
 def state_cord(request):
     user_id = request.session.get('state_user_id')
@@ -121,7 +140,6 @@ def state_cord(request):
         'state_user': state_user
     }
     return render(request, 'musabaqah/state-cord.html', context)
-
 
 def state_part(request):
     user_id = request.session.get('state_user_id')
@@ -149,9 +167,6 @@ def state_part(request):
     }
     return render(request, 'musabaqah/state-part.html', context)
 
-
-
-
 def state_password(request):
     user_id = request.session.get('state_user_id')
     if not user_id:
@@ -173,12 +188,6 @@ def state_password(request):
                 form.add_error('old_password', 'Old password is incorrect.')
 
     return render(request, 'musabaqah/state-pass-change.html', {'form': form})
-
-
-# views.py
-import random
-import string
-from django.core.mail import send_mail
 
 def state_forgot_password(request):
     form = StateUserForgotForm(request.POST or None)
@@ -211,7 +220,6 @@ def state_forgot_password(request):
                 form.add_error('email', "No account found with that email.")
 
     return render(request, "musabaqah/state-forgot-password.html", {"form": form})
-
 
 
 

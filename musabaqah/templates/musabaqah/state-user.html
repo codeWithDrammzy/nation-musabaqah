@@ -30,35 +30,44 @@
             <table class="w-full table-auto border border-gray-300 rounded-lg overflow-hidden">
                 <thead>
                     <tr class="bg-gray-800 text-white uppercase text-sm leading-normal">
-                        <th class="py-3 px-6 text-left">Name</th>
-                        <th class="py-3 px-6 text-left">Phone</th>
                         <th class="py-3 px-6 text-left">Profile</th>
+                       
+                        
                         <th class="py-3 px-6 text-left">State</th>
                         <th class="py-3 px-6 text-center">Actions</th>
                     </tr>
                 </thead>
+                
                 <tbody class="text-gray-700 text-sm font-light">
                     {% for user in state %}
                     <tr class="border-b border-gray-200 hover:bg-gray-100">
-                        <td class="py-3 px-6 text-left">{{ user.first_name|upper }} {{ user.last_name|upper }}</td>
-                        <td class="py-3 px-6 text-left">{{ user.phone|upper }}</td>
+                
+                        <!-- Profile Picture First -->
                         <td class="py-3 px-6 text-left">
-                            {% if user.avatar %}
-                                <img src="{{ user.avatar.url }}" alt="Profile Picture" class="w-16 h-16 rounded-full object-cover">
-                            {% else %}
-                                <img src="{% static 'images/avater.png' %}" alt="Profile Picture" class="w-16 h-16 rounded-full object-cover">
-                            {% endif %}
-                        </td> 
+                            <div class="flex items-center space-x-4">
+                                {% if user.avatar %}
+                                    <img src="{{ user.avatar.url }}" alt="Profile Picture" class="w-12 h-12 rounded-full object-cover">
+                                {% else %}
+                                    <img src="{% static 'images/avater.png' %}" alt="Profile Picture" class="w-12 h-12 rounded-full object-cover">
+                                {% endif %}
+                                <span class="font-semibold">{{ user.first_name|upper }} {{ user.last_name|upper }}</span>
+                            </div>
+                        </td>
+                        
+                
+                     
+                
+                      
                         <td class="py-3 px-6 text-left">{{ user.get_state_display|upper }}</td>
-
                         <td class="py-3 px-6 text-center">
                             <div>
                                 <form method="post" action="#"
                                     onsubmit="return confirm('Are you sure you want to manage this user?');" class="inline-block">
                                     {% csrf_token %}
-                                    <button type="submit" class="px-4 py-2 bg-yellow-500 text-white text-sm rounded-lg shadow-md hover:bg-yellow-600 transition duration-200">
-                                        Manage User
-                                    </button>
+                                    <a href="{% url 'state-user-view' user.id %}" class="px-4 py-2 bg-blue-500 text-white text-sm rounded-xl shadow-md hover:bg-blue-600 transition duration-200">
+                                        View User
+                                    </a>
+                                    
                                 </form>
                             </div>
                         </td>
@@ -69,6 +78,7 @@
                     </tr>
                     {% endfor %}
                 </tbody>
+                
             </table>
         </div>
 
