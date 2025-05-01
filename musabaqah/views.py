@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from.forms import LoginUserForm, StateUserForm , CreateUser, EmailLoginForm, ParticipantForm
+from.forms import * 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import auth
 from. models import *
@@ -148,6 +148,70 @@ def state_part(request):
         'form': form
     }
     return render(request, 'musabaqah/state-part.html', context)
+
+
+
+
+def state_password(request):
+    user_id = request.session.get('state_user_id')
+    if not user_id:
+        return redirect('my-login')  # StateUser not logged in
+
+    state_user = StateUser.objects.get(id=user_id)
+    form = ChangePasswordForm(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            old_password = form.cleaned_data['old_password']
+            new_password = form.cleaned_data['new_password']
+
+            if check_password(old_password, state_user.password):
+                state_user.password = make_password(new_password)
+                state_user.save()
+                return redirect('state-board')
+            else:
+                form.add_error('old_password', 'Old password is incorrect.')
+
+    return render(request, 'musabaqah/state-pass-change.html', {'form': form})
+
+
+# views.py
+import random
+import string
+from django.core.mail import send_mail
+
+def state_forgot_password(request):
+    form = StateUserForgotForm(request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            try:
+                state_user = StateUser.objects.get(email=email)
+                
+                # Generate a simple temporary password or token
+                temp_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+                
+                # Update password (hashed)
+                state_user.password = make_password(temp_password)
+                state_user.save()
+
+                # Send email
+                send_mail(
+                    subject="Musabaqah Password Reset",
+                    message=f"Your new temporary password is: {temp_password}\nPlease log in and change it immediately.",
+                    from_email="noreply@musabaqah.com",
+                    recipient_list=[email],
+                    fail_silently=False
+                )
+
+                messages.success(request, "A temporary password has been sent to your email.")
+                return redirect('my-login')
+            except StateUser.DoesNotExist:
+                form.add_error('email', "No account found with that email.")
+
+    return render(request, "musabaqah/state-forgot-password.html", {"form": form})
+
 
 
 

@@ -40,11 +40,18 @@
                         Login
                     </button>
                 </form>
+                <div class="flex justify-between">
+                    <p class="text-center text-sm text-gray-600 mt-6">
+                        Not authorized? 
+                        <a href="{% url 'home' %}" class="text-yellow-500 hover:underline">Back to Home</a>
+                    </p>
+                    <p class="text-center text-sm text-gray-600 mt-6">
+                        
+                        <a href="{% url 'state-forgot-password' %}" class="text-yellow-500 hover:underline">Forgot Password? </a>
+                    </p>
 
-                <p class="text-center text-sm text-gray-600 mt-6">
-                    Not authorized? 
-                    <a href="{% url 'home' %}" class="text-yellow-500 hover:underline">Back to Home</a>
-                </p>
+                </div>
+                
             </div>
         </div>
 

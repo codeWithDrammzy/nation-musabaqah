@@ -1,0 +1,61 @@
+{% load static %}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>State|Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .form-container {
+        max-width: 600px; /* Increased max-width */
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 4rem; /* Increased padding */
+        padding-bottom: 4rem;
+        padding-left: 2rem;  /* Added horizontal padding */
+        padding-right: 2rem;
+      }
+      .form-heading{
+        text-align: center;
+        margin-bottom: 2.5rem; /* Increased heading margin */
+      }
+      .form-input-group {
+        margin-bottom: 1.5rem; /* Increased spacing between input groups */
+      }
+      .form-button {
+        margin-top: 2rem;
+        width: 100%; /* Make button full width */
+      }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    {% include 'musabaqah/state-header.html' %}
+
+    <div class="flex">
+
+        {% include 'musabaqah/state-aside.html' %}
+
+        <main class="flex-1 pt-24 px-6 md:ml-64">
+
+            <div class="bg-white rounded-xl shadow-md  form-container">
+                <h2 class="text-2xl font-semibold  text-gray-800 form-heading">Change Password</h2>
+                <form method="post"  class="space-y-6">
+                    {% csrf_token %}
+                    
+                    {{form|crispy}}
+                   
+                      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline form-button">
+                          Change My Password
+                      </button>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+    </div>
+</body>
+</html>
