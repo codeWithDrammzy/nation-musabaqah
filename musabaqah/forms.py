@@ -28,11 +28,18 @@ class StateUserForm(forms.ModelForm):
         model = StateUser
         fields = ['first_name', 'last_name', 'email', 'phone', 'avatar', 'state']
         exclude = ['role']
+
 class ParticipantForm(forms.ModelForm):
     class Meta:
         model = Participant
         fields = '__all__'
         exclude =['state_user']
+
+class UpdateParticipantForm(forms.ModelForm):
+    class Meta:
+        model = Participant
+        fields = '__all__'
+        exclude =['state_user','gender']
 
 
 class ChangePasswordForm(forms.Form):
@@ -51,3 +58,9 @@ class ChangePasswordForm(forms.Form):
 
 class StateUserForgotForm(forms.Form):
     email = forms.EmailField(label="Your Registered Email")
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields  = ['title', 'body', 'media']

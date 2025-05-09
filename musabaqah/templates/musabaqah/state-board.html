@@ -1,77 +1,144 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>State|Dashboard</title>
+    <title>State | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="bg-gray-100 font-sans">
 
-   {% include 'musabaqah/state-header.html' %}
-
-    <!-- Main Layout -->
-    <div class="flex">
-
-        <!-- Sidebar -->
-        {% include 'musabaqah/state-aside.html' %}                                                         
-
-        <!-- Main Content -->
-        <main class="flex-1 pt-24 px-6 md:ml-64">
-
-            <div class="grid grid-cols-1 md:grid-cols-3   gap-6 mb-6">
-
-                <!-- Card 1 -->
-                <div class="bg-white p-6 rounded-xl shadow">
-                    <h2 class="text-lg font-semibold  mb-2">Total Participants</h2>
-                    <p class="text-3xl font-bold text-blue-600">124</p>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="bg-white p-6 rounded-xl shadow">
-                    <h2 class="text-lg font-semibold  mb-2">Submitted Results</h2>
-                    <p class="text-3xl font-bold text-green-600">58</p>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="bg-white p-6 rounded-xl shadow">
-                    <h2 class="text-lg font-semibold  mb-2">Pending Reviews</h2>
-                    <p class="text-3xl font-bold text-red-600">12</p>
-                </div>
-
-            </div>
-
-            <!-- Table Placeholder -->
-            <div class="bg-white p-6 rounded-xl shadow">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">Recent Participants</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full table-auto text-sm">
-                        <thead class="bg-gray-50 text-left">
-                            <tr>
-                                <th class="px-4 py-2">Name</th>
-                                <th class="px-4 py-2">Reg. No</th>
-                                <th class="px-4 py-2">Level</th>
-                                <th class="px-4 py-2">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-t">
-                                <td class="px-4 py-2">Aliyu Musa</td>
-                                <td class="px-4 py-2">MAA12345</td>
-                                <td class="px-4 py-2">Senior</td>
-                                <td class="px-4 py-2 text-green-600">Approved</td>
-                            </tr>
-                            <!-- Add more rows as needed -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </main>
-    </div>
-
+    <!-- Header -->
+    {% include 'musabaqah/state-header.html' %}
 
   
+
+    <!-- Mobile Sidebar -->
+     <aside id="mobileSidebar" class="fixed top-0 left-0 w-64 bg-gray-800 shadow h-full z-40 transform -translate-x-full transition-transform duration-300 md:hidden">
+        <div class="p-4 text-white font-bold text-lg border-b border-gray-700">
+            <i class="fas fa-user-shield mr-2"></i>State Coordinator
+        </div>
+        <nav class="p-4 text-white space-y-2">
+            <a href="{% url 'state-board' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black"><i class="fas fa-home mr-2"></i> Dashboard</a>
+            <a href="{% url 'state-part' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black"><i class="fas fa-users mr-2"></i> Participants</a>
+            <a href="{% url 'state-cord' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black"><i class="fas fa-user-friends mr-2"></i> Coordinators</a>
+            <a href="{% url 'logout-user' %}" onclick="return confirm('Are you sure you want to Logout?')" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+        </nav>
+    </aside> 
+
+   {%include 'musabaqah/state-aside.html '%}
+
+    <!-- Main Content -->
+    <main class="md:pt-24 pt-20 px-6 md:ml-64">
+       {% comment %} Horizontal blue buttons visible only on small screens {% endcomment %}
+       <div class="flex flex-wrap justify-between gap-1 mb-4 md:hidden">
+        <a href="{% url 'state-board' %}"
+           class="flex-1 min-w-0 bg-blue-600 text-white text-xs font-medium rounded-md px-2.5 py-2 flex items-center justify-center gap-1 shadow hover:bg-blue-700 transition">
+            <i class="fas fa-home text-xs"></i> Home
+        </a>
+        
+        <a href="{% url 'state-part' %}"
+           class="flex-1 min-w-0 bg-blue-600 text-white text-xs font-medium rounded-md px-2.5 py-2 flex items-center justify-center gap-1 shadow hover:bg-blue-700 transition">
+            <i class="fas fa-users text-xs"></i> Participants
+        </a>
+        
+        <a href="{% url 'state-cord' %}"
+           class="flex-1 min-w-0 bg-blue-600 text-white text-xs font-medium rounded-md px-2.5 py-2 flex items-center justify-center gap-1 shadow hover:bg-blue-700 transition">
+            <i class="fas fa-user-friends text-xs"></i> Coordinators
+        </a>
+       </div>
+    
+
+
+
+        <div class=" hidden md:block md:grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <!-- Card 1 -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-users text-blue-500 text-xl mr-2"></i>
+                    <h2 class="text-lg font-semibold">Total Participants</h2>
+                </div>
+                <p class="text-3xl font-bold text-blue-600">{{part_total}}</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-file-alt text-green-500 text-xl mr-2"></i>
+                    <h2 class="text-lg font-semibold">Registered States</h2>
+                </div>
+                <p class="text-3xl font-bold text-green-600">{{state_total}}</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <div class="flex items-center mb-2">
+                    <i class="fas fa-clock text-red-500 text-xl mr-2"></i>
+                    <h2 class="text-lg font-semibold">Pending Reviews</h2>
+                </div>
+                <p class="text-3xl font-bold text-red-600">12</p>
+            </div>
+        </div>
+
+        <!-- Participants Table -->
+        <div class="bg-white p-6 rounded-xl shadow">
+            <div class="flex items-center mb-4">
+                <i class="fas fa-table text-gray-700 text-lg mr-2"></i>
+                <h3 class="text-lg font-semibold text-gray-800">State Participants ({{part_total}})</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto text-sm">
+                    <thead class="bg-gray-50 text-left">
+                        <tr>
+                            <th class="px-4 py-2"><i class="fas fa-image mr-1 text-gray-400"></i>Avatar</th>
+                            <th class="px-4 py-2"><i class="fas fa-user mr-1 text-gray-400"></i>Name</th>
+                            <th class="px-4 py-2"><i class="fas fa-id-card mr-1 text-gray-400"></i>State</th>
+                            <th class="px-4 py-2"><i class="fas fa-genderless mr-1 text-gray-400"></i>Gender</th>
+                            <th class="px-4 py-2"><i class="fas fa-layer-group mr-1 text-gray-400"></i>Hibz</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for participant in participants %}
+                        <tr class="border-t">
+                            <td class="px-4 py-2">
+                                {% if participant.avatar %}
+                                    <img src="{{ participant.avatar.url }}" alt="Avatar" class="w-12 h-12 rounded-full">
+                                {% else %}
+                                    <img src="{% static 'images/avater.png' %}" alt="Avatar" class="w-12 h-12 rounded-full">
+                                {% endif %}
+
+                            </td>
+                            <td class="px-4 py-2">{{ participant.first_name|title }} {{ participant.last_name|title }}</td>
+                            <td class="px-4 py-2">{{ participant.state_user.get_state_display }}</td>
+                            <td class="px-4 py-2">{{ participant.get_gender_display }}</td>
+                            <td class="px-4 py-2">{{ participant.hibz }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        const btn = document.getElementById('hamburgerBtn');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+
+        btn.addEventListener('click', () => {
+            mobileSidebar.classList.toggle('-translate-x-full');
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!mobileSidebar.contains(event.target) && !btn.contains(event.target)) {
+                mobileSidebar.classList.add('-translate-x-full');
+            }
+        });
+    </script>
+
 </body>
 </html>

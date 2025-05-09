@@ -1,17 +1,21 @@
-{% load static %}  
-<nav class="bg-gray-800 text-white shadow-md">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center space-x-3">
+{% load static %}
+<nav class="bg-gray-800 text-white shadow-md fixed top-0 w-full z-50">
+    <div class="container mx-auto px-4 md:py-3 py-2 flex justify-between items-center">
+        <!-- Logo and Brand Name -->
+        <div class="flex items-center space-x-4">
             <a href="{% url 'home' %}" class="flex items-center space-x-3 text-white hover:text-yellow-400 transition duration-200">
-                <img src="{% static 'images/quran.jpg' %}" alt="Logo" class="w-10 h-10 object-contain rounded-full">
-                <span class="text-xl font-bold tracking-wide">National Musabaqah</span>
+                <img src="{% static 'images/quran.jpg' %}" alt="Logo" class="w-12 h-12 object-contain rounded-full">
+                <span class="text-2xl font-bold tracking-wide hidden md:block">National Musabaqah</span>
+                <span class="text-sm md:hidden font-bold tracking-wide"> Musabaqah</span>
             </a>
         </div>
-        <div class="flex items-center space-x-4">
-            <a href="#" class="text-white hover:text-yellow-400 font-medium transition duration-200">
-                mm
+
+        <!-- Navigation Links -->
+        <div class="flex items-center space-x-6">
+            <a href="{% url 'about' %}" class="text-white hover:text-yellow-400 font-medium transition duration-200">
+                About
             </a>
-            <a href="{%url 'my-login'%}" class="text-white hover:text-yellow-400 transition duration-200" title="Login">
+            <a href="{% url 'my-login' %}" class="text-white hover:text-yellow-400 transition duration-200" title="Login" aria-label="Login">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 16l4-4m0 0l-4-4m4 4H3m13 4v1a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v1" />
                 </svg>
@@ -19,3 +23,4 @@
         </div>
     </div>
 </nav>
+

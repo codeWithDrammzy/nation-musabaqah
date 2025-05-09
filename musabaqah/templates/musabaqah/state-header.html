@@ -1,52 +1,93 @@
 {% load static %}
 <header class="fixed top-0 left-0 right-0 bg-white shadow z-50">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
+        
+        <!-- Logo Section -->
         <div class="flex items-center">
             <img src="{% static 'images/quran.jpg' %}" alt="Logo" class="w-10 h-10 object-contain rounded-full mr-3">
             <h1 class="text-xl text-gray-800 font-bold">National Musabaqah</h1>
         </div>
-        <div class="flex items-center">
-            <span class="text-sm text-gray-600 mr-2">
-                Welcome, <span class="font-semibold">{{ state_user.first_name|upper }}</span>
-            </span>
-            <div class="relative">
-                <button id="user-menu-button" class="focus:outline-none focus:shadow-outline">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-600">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                    </svg>
 
-                </button>
-                <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden" aria-labelledby="user-menu-button" role="menu" aria-orientation="vertical">
-                    
-                    <a href="{% url 'logout-user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                        Logout
-                    </a>
-                    <a href="{% url 'state-pass-change' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                        Change Password
-                    </a>
-                   
-                </div>
+        <!-- User Profile Section (Hidden on small screens) -->
+        <div class="relative flex items-center space-x-2 hidden md:flex">
+            <div class="flex flex-col items-center">
+                <img src="{{ state_user.avatar.url }}" 
+                     alt="{{ state_user.first_name }}" 
+                     class="w-10 h-10 rounded-full object-cover">
+                <span class="text-xs font-semibold text-gray-700 mt-1">
+                    {{ state_user.first_name|upper }}
+                </span>
+            </div>
+            <button id="user-menu-button" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+                <i class="fas fa-chevron-down text-sm"></i>
+            </button>
+            <div id="user-menu" class="hidden absolute right-0 top-14 w-40 bg-white border rounded shadow-lg z-50">
+                <a href="{% url 'logout-user' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2" role="menuitem">
+                    <i class="fa fa-sign-out-alt text-red-500"></i> Logout
+                </a>
+                <a href="{% url 'state-pass-change' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2" role="menuitem">
+                    <i class="fa fa-cogs text-blue-500"></i> Change Password
+                </a>
             </div>
         </div>
     </div>
 </header>
 
+<!-- Hamburger for Mobile -->
+<div class="md:hidden fixed top-4 right-4 z-50">
+    <button id="hamburgerBtn" class="text-gray-800 text-2xl focus:outline-none">
+        <i class="fas fa-bars"></i>
+    </button>
+</div> 
 
+<!-- Mobile Sidebar -->
+<aside id="mobileSidebar" class="fixed top-0 left-0 w-64 bg-gray-800 shadow rounded-xl z-40 transform -translate-x-full transition-transform duration-300 md:hidden">
+    <div class="p-4 text-white font-bold text-lg border-b border-gray-700">
+        <i class="fas fa-user-shield mr-2"></i>State Coordinator
+    </div>
+    <nav class="p-4 text-white space-y-2">
+       
+        
+        <a href="{% url 'logout-user' %}" onclick="return confirm('Are you sure you want to Logout?')" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+        <a href="{% url 'state-pass-change' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black" role="menuitem">
+            <i class="fa fa-cogs text-blue-500"></i> Change Password
+        </a>
+    </nav>
+</aside>
 
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<!-- Toggle Script -->
 <script>
+    // Toggle user dropdown
     const userMenuButton = document.getElementById('user-menu-button');
     const userMenu = document.getElementById('user-menu');
-    
-    if (userMenuButton && userMenu) { // Check if elements exist
-        userMenuButton.addEventListener('click', () => {
+    if (userMenuButton && userMenu) {
+        userMenuButton.addEventListener('click', (event) => {
+            event.stopPropagation();
             userMenu.classList.toggle('hidden');
         });
-    
-        // Close the menu when clicking outside
         document.addEventListener('click', (event) => {
             if (!userMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
                 userMenu.classList.add('hidden');
             }
         });
     }
-    </script>
+
+    // Toggle mobile sidebar
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    if (hamburgerBtn && mobileSidebar) {
+        hamburgerBtn.addEventListener('click', () => {
+            mobileSidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Optional: click outside to close
+        document.addEventListener('click', (e) => {
+            if (!mobileSidebar.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                mobileSidebar.classList.add('-translate-x-full');
+            }
+        });
+    }
+</script>

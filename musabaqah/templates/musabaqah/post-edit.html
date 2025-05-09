@@ -1,0 +1,45 @@
+{% extends 'musabaqah/base.html' %}
+{% load static %}
+{% load tailwind_filters %}
+
+{% block content %}
+<div class="flex bg-gray-100 min-h-screen">
+  <h3 class="md:hidden text-2xl text-center font-bold p-20 items-center">
+    404 Device Can’t Access This Page
+  </h3>
+  {% include 'musabaqah/sidebar.html' %}
+
+  <main class="hidden md:block flex-1 md:ml-64 p-6 overflow-auto" id="main-content">
+    <header class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">Edit Post</h1>
+    </header>
+
+    <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-xl shadow-md space-y-6">
+      {% csrf_token %}
+      {{ form|crispy }}
+
+      {% if post.media %}
+        <div>
+          {% if post.is_video %}
+            <video controls class="w-1/2 h-auto rounded-lg">
+              <source src="{{ post.media.url }}" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          {% else %}
+            <img src="{{ post.media.url }}" alt="Post Media" class="w-1/2 h-auto rounded-lg" />
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <div class="flex justify-end gap-4">
+        <a href="{% url 'post-view' post.id %}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">
+          Cancel
+        </a>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </main>
+</div>
+{% endblock %}

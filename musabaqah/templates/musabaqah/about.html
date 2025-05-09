@@ -1,0 +1,55 @@
+{% extends 'musabaqah/base.html' %}
+{% block content %}
+{% include 'musabaqah/nav.html' %}
+<meta name="description" content="The National Qur'anic Recitation Competition, initiated in 1986, is an annual event in Nigeria that brings together youths who have memorized the Qur'an." />
+<meta name="keywords" content="Qur'anic Recitation, Islamic competition, Nigeria, Usman Danfodiyo University, National Musabaqah" />
+
+
+<div class="max-w-5xl mx-auto mt-24 px-4">
+  <div class="bg-white rounded-2xl shadow-lg p-8 md:p-12">
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-6 text-blue-800 text-center md:text-left">About the National Musabaqah</h1>
+    
+    <div class="flex flex-col md:flex-row gap-8">
+      <div class="flex-1">
+        <p class="text-gray-700 mb-4 leading-relaxed text-center md:text-left">
+          The National Qur’anic Recitation Competition, initiated in 1986, is the brainchild of the Centre for Islamic Studies, Usman Danfodiyo University, Sokoto.
+          The first competitions were held in Sokoto under the university's supervision, and since then, it has become an annual national event hosted by various states across the federation.
+        </p>
+
+        <p class="text-gray-700 mb-4 leading-relaxed text-center md:text-left">
+          The event brings together youths from nearly every state in Nigeria, including the Federal Capital Territory (FCT), who have memorized the Qur’an. 
+          Winners at the national level often represent Nigeria in international competitions in countries like Saudi Arabia and Malaysia. 
+          Nigeria has proudly secured first-place positions multiple times.
+        </p>
+      </div>
+
+      <div class="flex-1">
+        <h2 class="text-2xl font-bold mt-10 mb-4 text-green-800 text-center md:text-left">About the Developer</h2>
+        <p class="text-gray-700 leading-relaxed mb-6 text-center md:text-left">
+          This application was built by <strong>Dawud Aliyu Ahmad</strong>, a dedicated software developer with a strong background in Django and Laravel. 
+          Dawud is passionate about building solutions that uplift communities and support educational initiatives.
+        </p>
+
+        <div class="border-t border-gray-200 pt-6 mt-10">
+          <h2 class="text-2xl font-bold text-indigo-800 mb-4 text-center md:text-left">Contact Information</h2>
+          <ul class="text-gray-700 space-y-2 text-center md:text-left">
+            <li class="flex items-center gap-2">
+              <i class="fas fa-envelope text-blue-600"></i><strong>Email:</strong> dawudahmad411@gmail.com
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="fas fa-phone-alt text-green-600"></i><strong>Phone:</strong> +234-902-355-3585
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="fab fa-github text-gray-800"></i><strong>GitHub:</strong> <a href="https://github.com/codeWithDrammzy" class="text-blue-600 hover:underline">Dev_with_Dawud</a>
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="fas fa-map-marker-alt text-red-600"></i><strong>Location:</strong> Nigeria
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

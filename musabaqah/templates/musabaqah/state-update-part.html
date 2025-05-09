@@ -1,0 +1,99 @@
+{% load static %}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>State | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Header -->
+    {% include 'musabaqah/state-header.html' %}
+
+  
+
+    <!-- Mobile Sidebar -->
+     <aside id="mobileSidebar" class="fixed top-0 left-0 w-64 bg-gray-800 shadow h-full z-40 transform -translate-x-full transition-transform duration-300 md:hidden">
+        <div class="p-4 text-white font-bold text-lg border-b border-gray-700">
+            <i class="fas fa-user-shield mr-2"></i>State Coordinator
+        </div>
+        <nav class="p-4 text-white space-y-2">
+            <a href="{% url 'state-board' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black"><i class="fas fa-home mr-2"></i> Dashboard</a>
+            <a href="{% url 'state-part' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black"><i class="fas fa-users mr-2"></i> Participants</a>
+            <a href="{% url 'state-cord' %}" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black"><i class="fas fa-user-friends mr-2"></i> Coordinators</a>
+            <a href="{% url 'logout-user' %}" onclick="return confirm('Are you sure you want to Logout?')" class="block px-4 py-2 rounded hover:bg-gray-100 hover:text-black"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+        </nav>
+    </aside> 
+
+   {%include 'musabaqah/state-aside.html '%}
+
+    <!-- Main Content -->
+    <main class="md:pt-24 pt-20 px-6 md:ml-64">
+       {% comment %} Horizontal blue buttons visible only on small screens {% endcomment %}
+        <div class="flex flex-wrap gap-2 mb-4 md:hidden">
+            <a href="{% url 'state-board' %}"
+            class="bg-blue-600 text-white text-sm font-medium rounded-lg px-3 py-2 flex items-center gap-2 shadow hover:bg-blue-700 transition">
+                <i class="fas fa-home"></i> Home
+            </a>
+            
+            <a href="{% url 'state-part' %}"
+            class="bg-blue-600 text-white text-sm font-medium rounded-lg px-3 py-2 flex items-center gap-2 shadow hover:bg-blue-700 transition">
+                <i class="fas fa-users"></i> Participants
+            </a>
+            
+            <a href="{% url 'state-cord' %}"
+            class="bg-blue-600 text-white text-sm font-medium rounded-lg px-3 py-2 flex items-center gap-2 shadow hover:bg-blue-700 transition">
+                <i class="fas fa-user-friends"></i> Coordinators
+            </a>
+        </div>
+
+
+
+        <div class="bg-white p-6 rounded-xl shadow-md max-w-3xl mx-auto">
+            <h2 class="text-2xl font-semibold mb-6 text-gray-800 flex items-center">
+                <i class="fas fa-edit mr-2 text-yellow-500"></i> Update Participant
+            </h2>
+
+            <form method="post" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                {{ form|crispy }}
+
+                <div class="flex justify-end gap-4 mt-6">
+                    <a href="{% url 'state-part' %}" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-xl shadow-md transition duration-200">
+                        Cancel
+                    </a>
+                    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-xl shadow-md transition duration-200">
+                        <i class="fas fa-save mr-1"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        const btn = document.getElementById('hamburgerBtn');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+
+        btn.addEventListener('click', () => {
+            mobileSidebar.classList.toggle('-translate-x-full');
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!mobileSidebar.contains(event.target) && !btn.contains(event.target)) {
+                mobileSidebar.classList.add('-translate-x-full');
+            }
+        });
+    </script>
+
+</body>
+</html>

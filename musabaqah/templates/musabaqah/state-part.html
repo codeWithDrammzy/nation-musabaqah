@@ -3,111 +3,170 @@
 {% load crispy_forms_tags %}
 {% load widget_tweaks %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>State|Participants</title>
+    <title>State | Participants</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="bg-gray-100 font-sans">
 
-    <!-- Top Navigation -->
+
     {% include 'musabaqah/state-header.html' %}
 
+    <div class="flex flex-wrap">
 
-    <!-- Main Layout -->
-    <div class="flex">
-
-        <!-- Sidebar -->
-        {% include 'musabaqah/state-aside.html' %}                                                         
-
-        <!-- Main Content -->
-        <main class="flex-1 pt-24 px-6 md:ml-64">
-
-            <div class="bg-white p-6 rounded-xl shadow  max-w-5xl mx-auto">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">State Participants</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full table-auto text-sm">
-                        <thead class="bg-gray-100 text-gray-700">
-                            <tr>
-                                <th class="px-4 py-2 text-left">Profile</th>
-                                
-                                <th class="px-4 py-2 text-left">National ID</th>
-                                <th class="px-4 py-2 text-left">Hizb</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for user in part %}
-                                {% if request.user.state_user == user.part.state %}
-                                <tr class="border-t">
-                                    <td class="px-4 py-2 text-left flex items-center gap-3">
-                                        {% if user.avatar %}
-                                            <img src="{{ user.avatar.url }}" alt="{{ user.first_name }}" class="w-10 h-10 rounded-full object-cover">
-                                        {% else %}
-                                            <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm text-white">N/A</div>
-                                        {% endif %}
-                                        <span>{{ user.first_name|upper }} {{ user.last_name|upper }}</span>
-                                    </td>
-                                    <td class="px-4 py-2 text-left">{{ user.national_id }}</td>
-                                    <td class="px-4 py-2 text-left">{{ user.hibz }}</td>
-                                </tr>
-                                {% endif %}
-                            {% empty %}
-                                <tr>
-                                    <td colspan="3" class="text-center text-gray-500 py-4">No Registered Participants found.</td>
-                                </tr>
-                            {% endfor %}
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            
-            <!-- New Participant Form Section -->
-            <div class="bg-white p-6 rounded-xl shadow mt-6 max-w-5xl mx-auto">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">Add New Participant</h3>
-                
-                <form method="POST" enctype="multipart/form-data" class="space-y-4">
-                    {% csrf_token %}
-                  
-                    <div class="flex flex-wrap gap-4">
-                        <div class="w-full md:w-[48%]">
-                            {{ form.first_name.label_tag }}
-                            {{ form.first_name|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
-                        </div>
-                        <div class="w-full md:w-[48%]">
-                            {{ form.last_name.label_tag }}
-                            {{ form.last_name|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
-                        </div>
-                        <div class="w-full md:w-[48%]">
-                            {{ form.national_id.label_tag }}
-                            {{ form.national_id|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
-                        </div>
-                        <div class="w-full md:w-[48%]">
-                            {{ form.hibz.label_tag }}
-                            {{ form.hibz|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
-                        </div>
-                        <div class="w-full md:w-[48%]">
-                            {{ form.gender.label_tag }}
-                            {{ form.gender|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
-                        </div>
-                        <div class="w-full md:w-[48%]">
-                            {{ form.avatar.label_tag }}
-                            {{ form.avatar|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
-                        </div>
-                    </div>
-                    <div class="pt-4">
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Participant</button>
-                    </div>
-                </form>
-            </div>
-                
-
-        </main>
+    <div id="mobileSidebar" class="lg:flex lg:w-64 hidden bg-gray-800 text-white">
+        {% include 'musabaqah/state-aside.html' %}
     </div>
+
+    <button id="hamburgerBtn" class="lg:hidden absolute top-4 left-4 p-2 bg-gray-800 text-white rounded-md">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <main class="md:pt-24 pt-20 px-6 md:ml-64 max-w-full">
+            {% comment %} Horizontal blue buttons visible only on small screens {% endcomment %}
+       <div class="flex flex-wrap justify-between gap-1 mb-4 md:hidden">
+        <a href="{% url 'state-board' %}"
+           class="flex-1 min-w-0 bg-blue-600 text-white text-xs font-medium rounded-md px-2.5 py-2 flex items-center justify-center gap-1 shadow hover:bg-blue-700 transition">
+            <i class="fas fa-home text-xs"></i> Home
+        </a>
+        
+        <a href="{% url 'state-part' %}"
+           class="flex-1 min-w-0 bg-blue-600 text-white text-xs font-medium rounded-md px-2.5 py-2 flex items-center justify-center gap-1 shadow hover:bg-blue-700 transition">
+            <i class="fas fa-users text-xs"></i> Participants
+        </a>
+        
+        <a href="{% url 'state-cord' %}"
+           class="flex-1 min-w-0 bg-blue-600 text-white text-xs font-medium rounded-md px-2.5 py-2 flex items-center justify-center gap-1 shadow hover:bg-blue-700 transition">
+            <i class="fas fa-user-friends text-xs"></i> Coordinators
+        </a>
+       </div>
+
+       <div class="bg-white p-6 rounded-xl shadow max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">
+                <i class="fas fa-users mr-2 text-blue-600"></i> State Participants
+            </h3>
+            <a href="#add-participant-form" class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-xl shadow hover:bg-green-700 transition text-sm">
+                <i class="fas fa-plus"></i> New
+            </a>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto text-sm">
+                <thead class="bg-gray-100 text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left">Profile</th>
+                        <th class="px-4 py-2 text-left">Hizb</th>
+                        <th class="px-4 py-2 text-left hidden md:table-cell">National ID</th>
+                        <th class="px-4 py-2 text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in part %}
+                        {% if request.user.state_user == user.part.state %}
+                        <tr class="border-t">
+                            <td class="px-4 py-2 text-left flex items-center gap-3">
+                                {% if user.avatar %}
+                                    <img src="{{ user.avatar.url }}" alt="{{ user.first_name }}" class="w-10 h-10 rounded-full object-cover">
+                                {% else %}
+                                    <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm text-white">N/A</div>
+                                {% endif %}
+                                <span>{{ user.first_name|upper }} {{ user.last_name|upper }}</span>
+                            </td>
+                            <td class="px-4 py-2 text-left">{{ user.hibz }}</td>
+                            <td class="px-4 py-2 text-left hidden md:table-cell">{{ user.national_id }}</td>
+                            <td class="py-4 px-2 text-left">
+                                <div>
+                                    {% if user.id %}
+                                    <a href="{% url 'state-part-view' user.id %}" class="px-4 py-2 bg-blue-500 text-white text-sm rounded-xl shadow hover:bg-blue-600 transition">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% else %}
+                                    <span class="text-gray-400">No ID</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-gray-500 py-4">No Registered Participants found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+        <div id="add-participant-form" class="bg-white p-6 rounded-xl shadow mt-6 max-w-5xl mx-auto">
+            <div class="flex justify-between">
+                <h3 class="text-lg font-semibold mb-4 text-gray-800">
+                    <i class="fas fa-user-plus mr-2 text-green-600"></i> Add New Participant
+                </h3>
+                
+
+            </div>
+
+
+            <form method="POST" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+                <div class="flex flex-wrap gap-4">
+                    <div class="w-full md:w-[48%]">
+                        {{ form.first_name.label_tag }}
+                        {{ form.first_name|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                    </div>
+                    <div class="w-full md:w-[48%]">
+                        {{ form.last_name.label_tag }}
+                        {{ form.last_name|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                    </div>
+                    <div class="w-full md:w-[48%]">
+                        {{ form.national_id.label_tag }}
+                        {{ form.national_id|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                    </div>
+                    <div class="w-full md:w-[48%]">
+                        {{ form.hibz.label_tag }}
+                        {{ form.hibz|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                    </div>
+                    <div class="w-full md:w-[48%]">
+                        {{ form.gender.label_tag }}
+                        {{ form.gender|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                    </div>
+                    <div class="w-full md:w-[48%]">
+                        {{ form.avatar.label_tag }}
+                        {{ form.avatar|add_class:"w-full mt-1 border border-gray-300 p-2 rounded" }}
+                    </div>
+                </div>
+                <div class="pt-4">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        <i class="fas fa-save mr-2"></i> Add Participant
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    const btn = document.getElementById('hamburgerBtn');
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    
+    btn.addEventListener('click', () => {
+        mobileSidebar.classList.toggle('-translate-x-full');
+    });
+    
+    document.addEventListener('click', function(event) {
+        if (!mobileSidebar.contains(event.target) && !btn.contains(event.target)) {
+            mobileSidebar.classList.add('-translate-x-full');
+        }
+    });
+</script>
 
 </body>
 </html>

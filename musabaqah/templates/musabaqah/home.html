@@ -2,10 +2,131 @@
 {% load static %}
 
 {% block content %}
-    {% include 'musabaqah/nav.html' %}
+{% include 'musabaqah/nav.html' %}
 
-    <div class="mt-4">  {# Added a Tailwind CSS class for margin-top #}
-        <h4>hellooooo</h4>
-        {{user}}
+<div class="max-w-7xl mx-auto mt-24 md:mt-24 px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8">
+    <!-- Main Content -->
+    <main class="w-full lg:w-3/4">
+        <!-- Search Input -->
+        <form method="GET" action="{% url 'home' %}" class="mb-6">
+            <input
+                type="text"
+                name="q"
+                placeholder="Search participant by name "
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </form>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for post in posts %}
+                <div class="bg-white rounded-2xl shadow hover:shadow-lg transition duration-300 overflow-hidden border border-gray-100 min-h-[auto]">
+                    {% if post.media %}
+                        {% if post.is_video %}
+                            <video controls class="w-full max-h-56 object-cover video-player">
+                                <source src="{{ post.media.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        {% else %}
+                            <img
+                                src="{{ post.media.url }}"
+                                alt="Post media"
+                                class="w-full max-h-48 object-cover cursor-pointer"
+                                onclick="openModal('{{ post.media.url }}')"
+                            >
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="p-5 flex flex-col">
+                        <h3 class="text-lg font-semibold text-gray-800 tracking-tight">{{ post.title|title }}</h3>
+                        <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                            {{ post.body|truncatewords:25 }}.<a href="{% url 'post-detail' post.pk %}" class="text-blue-600 hover:text-yellow-400 font-semibold">...Read more</a>
+                        </p>
+                        <div class="mt-4 flex justify-between items-center text-xs text-gray-500">
+                            <span>{{ post.author.username|default:"Admin" }}</span>
+                            <span>{{ post.created_at|date:"F j, Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-gray-600">No posts available.</p>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="w-full lg:w-1/4 bg-white rounded-2xl shadow-md p-6">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">📍 Registered States</h3>
+        <ul id="state-list" class="space-y-2 text-sm text-gray-700">
+            {% for state in states %}
+            <li class="hover:text-blue-600 font-bold cursor-pointer transition-all duration-200 hover:pl-2">
+                <a href="{% url 'registered-state' state.state %}"> {{ state.get_state_display|upper }} </a>
+            </li>
+            {% empty %}
+                <li class="text-gray-500">No states found.</li>
+            {% endfor %}
+        </ul>
+    </aside>
+</div>
+
+<!-- Modal for Enlarged Image -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div class="relative">
+        <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-2xl font-bold">&times;</button>
+        <img id="modalImage" src="" class="max-w-full max-h-screen rounded-lg shadow-lg" />
     </div>
+</div>
+
+<!-- Video Auto-Pause Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const videos = document.querySelectorAll('video');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (!entry.isIntersecting && !video.paused) {
+                    video.pause();
+                }
+            });
+        }, {
+            threshold: 0.25
+        });
+
+        videos.forEach(video => observer.observe(video));
+    });
+</script>
+
+
+<!-- Video Auto-Pause Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const videos = document.querySelectorAll('video');
+
+        // Intersection Observer to pause when video goes out of view
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (!entry.isIntersecting && !video.paused) {
+                    video.pause();
+                }
+            });
+        }, {
+            threshold: 0.25
+        });
+
+        videos.forEach(video => {
+            observer.observe(video);
+
+            // Pause all other videos when one is played
+            video.addEventListener('play', () => {
+                videos.forEach(v => {
+                    if (v !== video && !v.paused) {
+                        v.pause();
+                    }
+                });
+            });
+        });
+    });
+</script>
+
 {% endblock content %}

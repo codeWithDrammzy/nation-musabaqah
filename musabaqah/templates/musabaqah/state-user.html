@@ -3,11 +3,13 @@
 {% load static %}
 
 {% block content %}
-<div class="flex bg-gray-100 min-h-screen">
-
-    {% include 'musabaqah/sidebar.html' %}
-    
-    <main class="flex-1 md:ml-64  p-6 overflow-auto" id="main-content">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="{% static 'js/app.js' %}"></script>
+<div class=" flex bg-gray-100 min-h-screen">
+    <h3 class="md:hidden  text-2xl text-center font-bold p-20 items-center ">404 Device Cant access this page</h3>
+       {% include 'musabaqah/sidebar.html' %}
+   
+       <main class=" hidden md:block flex-1 md:ml-64  p-6 overflow-auto" id="main-content">
 
         <header class="flex justify-between items-center mb-6">
             <button onclick="toggleSidebar()" class="md:hidden text-gray-800 hover:text-gray-600 focus:outline-none focus:shadow-outline mr-4">
@@ -15,7 +17,7 @@
                     <path fill-rule="evenodd" d="M4 5h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2zm0 6h16a1 1 0 010 2H4a1 1 0 010-2z"/>
                 </svg>
             </button>
-            <div class="text-2xl font-bold text-gray-800">State User</div>
+            <div class="text-2xl font-bold text-gray-800">State Coordinators</div>
             <div><a href="#add-user" class="text-blue-600 hover:underline flex items-center">
                 <div class="rounded-full bg-blue-200 w-8 h-8 flex items-center justify-center mr-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -53,20 +55,18 @@
                                 <span class="font-semibold">{{ user.first_name|upper }} {{ user.last_name|upper }}</span>
                             </div>
                         </td>
-                        
-                
-                     
-                
-                      
-                        <td class="py-3 px-6 text-left">{{ user.get_state_display|upper }}</td>
+                         
+                        <td class="py-3 px-6 text-left"><i class="fa fa-map-marker-alt text-blue-500 mr-2"></i>{{ user.get_state_display|upper }}</td>
                         <td class="py-3 px-6 text-center">
                             <div>
                                 <form method="post" action="#"
                                     onsubmit="return confirm('Are you sure you want to manage this user?');" class="inline-block">
                                     {% csrf_token %}
-                                    <a href="{% url 'state-user-view' user.id %}" class="px-4 py-2 bg-blue-500 text-white text-sm rounded-xl shadow-md hover:bg-blue-600 transition duration-200">
+                                    <a href="{% url 'state-user-view' user.id %}" class="px-4 py-2 bg-blue-500  text-white text-sm rounded-xl shadow-md hover:bg-blue-600 transition duration-200 flex items-center gap-2">
+                                        <i class="fas fa-eye"></i>
                                         View User
                                     </a>
+                                    
                                     
                                 </form>
                             </div>
@@ -84,7 +84,18 @@
 
         <div id="add-user" class="bg-white p-6 rounded-lg shadow-md">
             <div class="flex justify-between">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Add Coordinator</h3>
+                <h3 class="text-lg font-semibold mb-4 text-gray-800">
+                    <i class="fas fa-user-plus mr-2 text-green-600"></i> Add New Participant
+                </h3>
+                {% if messages %}
+                    <div id="message-timer" class="text-white bg-blue-500 p-2 rounded-xl">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+
             </div>
             <div>
                 <form method="POST" enctype="multipart/form-data">
@@ -93,9 +104,11 @@
                         {{ form|crispy }}
                     </div>
                     <button type="submit"
-                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">
-                        Submit
-                    </button>
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 flex items-center gap-2">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit
+                </button>
+                
                 </form>
             </div>
         </div>
