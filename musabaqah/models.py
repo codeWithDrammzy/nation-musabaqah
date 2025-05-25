@@ -80,13 +80,19 @@ class Participant(models.Model):
     national_id = models.CharField(max_length=11, unique=True)
     hibz = models.CharField(choices=CATEGORY, max_length=10)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['hibz', 'gender'], name='unique_hibz_per_gender')
+            models.UniqueConstraint(fields=['state_user', 'hibz', 'gender'], name='unique_participant_per_state_category_gender')
         ]
+
+    def __str__(self):
+        return self.first_name + " " + self.last_name
+
+    @property
+    def state(self):
+        return self.state_user.state
 
 
 def __str__(self):
